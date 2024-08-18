@@ -23,3 +23,17 @@ const EntrySchema = new Schema(
     versionKey: false,
   }
 );
+
+// Indexes
+EntrySchema.index({ upcomingEntryID: 1 });
+EntrySchema.index({ enrollmentID: 1 });
+EntrySchema.index({ score: 1 });
+EntrySchema.index({ location: 1 });
+EntrySchema.index({ deletedAt: 1 });
+EntrySchema.index({ upcomingEntryID: 1, enrollmentID: 1 });
+EntrySchema.index({ createdBy: 1 });
+EntrySchema.index({ deletedBy: 1 });
+EntrySchema.index({ createdAt: 1 });
+EntrySchema.index({ feedback: "text" });
+
+export default model("Entry", EntrySchema);
