@@ -8,6 +8,7 @@ const CourseCodeSchema = new Schema(
     code: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     description: { type: String },
+    alternateTo: { type: String, ref: "CourseCode" },
 
     // Miscellanous
     createdBy: { type: String, ref: "User" },
