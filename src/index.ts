@@ -5,6 +5,8 @@ import { errorHandler, pageNotFound } from "./middlewares/errors.middleware";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
+import { usersRouter } from "./routes/users.routes";
+import { courseOfferingsRouter } from "./routes/courseOfferings.routes";
 
 connectToDatabase().catch((err) =>
   console.error("Database connection error:", err)
@@ -18,6 +20,8 @@ const version = "1.0";
 const baseUrl = `/api/${version}`;
 
 app.use(`${baseUrl}/enrollments`, enrollmentsRouter);
+app.use(`${baseUrl}/users`, usersRouter);
+app.use(`${baseUrl}/courseofferings`, courseOfferingsRouter);
 
 app.use(errorHandler);
 app.use(pageNotFound);

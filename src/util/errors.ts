@@ -35,3 +35,11 @@ export const NotFoundError = class NotFoundError extends Error {
     this.name = "NotFoundError";
   }
 };
+
+export const ValidationError = class ValidationError extends Error {
+  public status: number = 400;
+  constructor(message: string) {
+    super(message);
+    this.name = "ValidationError";
+  }
+};

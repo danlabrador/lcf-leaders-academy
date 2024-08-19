@@ -2,27 +2,29 @@ import {
   AuthorizationError,
   ConflictError,
   NotFoundError,
-} from "../util/errors";
+  ValidationError,
+} from "../../util/errors";
 import { Request, Response } from "express";
-import { CreateEnrollmentBodySchema } from "../models/validations/enrollments.validations";
-import { asyncHandler } from "../middlewares/errors.middleware";
-import { env } from "../env";
+import { asyncHandler } from "../../middlewares/errors.middleware";
 import z from "zod";
 import {
   createEnrollment,
   enrollmentExists,
-} from "../data-access/enrollments.mongoose";
+} from "../../data-access/enrollments.mongoose";
 import {
   checkIfUserExists,
   getUsersAuthorizedToCreateEnrollment,
-} from "../data-access/users.mongoose";
+} from "../../data-access/users.mongoose";
+import { CreateEnrollmentBodySchema } from "../../models/validations/enrollments.validations";
 
 export const createEnrollmentController = asyncHandler(
   async (req: Request, res: Response) => {
     try {
       // Validate request body
-      const body = CreateEnrollmentBodySchema.parse(req.body);
-      const { authenticatedUser, studentID, courseOfferingID, creditTo } = body;
+      CreateEnrollmentBodySchema.parse(req.body);
+
+      const { authenticatedUser, studentID, courseOfferingID, creditTo } =
+        req.body;
 
       // Check if user exists
       const isUserExists = await checkIfUserExists(studentID);
@@ -57,20 +59,10 @@ export const createEnrollmentController = asyncHandler(
       res.status(201).json(enrollment);
     } catch (error: unknown) {
       if (error instanceof z.ZodError) {
-        throw new Error("Invalid enrollment body.");
-      } else if (
-        error instanceof AuthorizationError ||
-        error instanceof ConflictError ||
-        error instanceof NotFoundError
-      ) {
-        res.status(error.status).json({ error: error.message });
-      } else {
-        if (env.NODE_ENV === "development") {
-          console.log(error instanceof NotFoundError);
-          console.error(error);
-        }
-        res.status(500).json({ error: "Internal server error" });
+        throw new ValidationError("Invalid enrollment body.");
       }
+
+      throw error;
     }
   }
 );

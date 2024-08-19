@@ -13,6 +13,8 @@ import { CourseOfferingModel } from "../models/schemas/courseOffering.schema";
 import bcrypt from "bcrypt";
 import { UserStatusEnum } from "../models/enums/UserStatusEnum";
 import { RoleEnum } from "../models/enums/RoleEnum";
+import { EnrollmentModel } from "../models/schemas/enrollment.schema";
+import { TransactionModel } from "../models/schemas/transaction.schema";
 
 // Connect to MongoDB
 mongoose.connect(env.DEV_DATABASE_URL);
@@ -27,6 +29,8 @@ const seedDatabase = async () => {
     await SectionModel.deleteMany({});
     await SemesterModel.deleteMany({});
     await CourseOfferingModel.deleteMany({});
+    await EnrollmentModel.deleteMany({});
+    await TransactionModel.deleteMany({});
 
     // Create Users
     const testPassword = await bcrypt.hash("password", 10);
@@ -143,7 +147,7 @@ const seedDatabase = async () => {
       codeVersion: 2,
       effectiveFrom: new Date("2024-01-01"),
     });
-    await CourseModel.create({
+    const course3: Course = await CourseModel.create({
       name: "Leaders Academy Level 3",
       courseCodeID: courseCodes[2]._id,
       description:
@@ -174,6 +178,7 @@ const seedDatabase = async () => {
         zipCode: "8000",
         country: "Philippines",
       },
+      price: 300,
       maxStudents: 250,
       coordinatorID: user1._id,
       createdBy: user2._id,
@@ -190,7 +195,25 @@ const seedDatabase = async () => {
         zipCode: "8000",
         country: "Philippines",
       },
+      price: 350,
       maxStudents: 250,
+      coordinatorID: user1._id,
+      createdBy: user2._id,
+    });
+
+    await CourseOfferingModel.create({
+      courseID: course3._id,
+      semesterID: semester._id,
+      classSchedules: ["0 15 * * WED 150"], // 3:00 PM every Wednesday for 2.5 hours
+      location: {
+        addressLineOne: "Cinema 2, NCCC Victoria Plaza",
+        city: "Davao City",
+        state: "Davao del Sur",
+        zipCode: "8000",
+        country: "Philippines",
+      },
+      price: 400,
+      maxStudents: 150,
       coordinatorID: user1._id,
       createdBy: user2._id,
     });

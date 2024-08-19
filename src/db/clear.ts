@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { env } from "@/env"; // Adjust the import based on your project structure
+import { env } from "../env"; // Adjust the import based on your project structure
 
 const clearDatabase = async () => {
   if (env.NODE_ENV !== "development") {

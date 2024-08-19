@@ -5,7 +5,6 @@ interface CourseOffering extends Document {
   _id: string;
   courseID: string;
   semesterID: string;
-  classSchedules?: string[];
   location: {
     addressLineOne: string;
     addressLineTwo?: string;
@@ -14,6 +13,8 @@ interface CourseOffering extends Document {
     zipCode: string;
     country: string;
   };
+  price: number;
+  classSchedules?: string[];
   maxStudents?: number;
   remarks?: string;
   coordinatorID: string;
@@ -29,7 +30,6 @@ const courseOfferingSchema = new Schema<CourseOffering>(
     // Course Offering information
     courseID: { type: String, ref: "Course", required: true },
     semesterID: { type: String, ref: "Semester", required: true },
-    classSchedules: { type: [String] },
     location: {
       addressLineOne: { type: String, required: true },
       addressLineTwo: { type: String },
@@ -38,6 +38,8 @@ const courseOfferingSchema = new Schema<CourseOffering>(
       zipCode: { type: String, required: true },
       country: { type: String, required: true },
     },
+    price: { type: Number, required: true },
+    classSchedules: { type: [String] },
     maxStudents: { type: Number },
     remarks: { type: String },
     coordinatorID: { type: String, ref: "User", required: true },

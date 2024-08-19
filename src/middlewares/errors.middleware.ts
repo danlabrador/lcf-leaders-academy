@@ -1,25 +1,41 @@
 import { Request, Response, NextFunction } from "express";
+import {
+  AuthenticationError,
+  AuthorizationError,
+  ConflictError,
+  NotFoundError,
+  ValidationError,
+} from "../util/errors";
+import { env } from "../env";
 
-const pageNotFound = (req: Request, res: Response, next: NextFunction) => {
-  const error = new Error(`Not found - ${req.originalUrl}`);
-  res.status(404);
-  next(error);
+const pageNotFound = (_: Request, res: Response) => {
+  res.status(404).json({ message: "Resource not found" });
 };
 
+interface CustomError extends Error {
+  status?: number;
+}
+
 const errorHandler = (
-  err: Error,
+  err: CustomError,
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const statusCode = res.statusCode || 500;
-
-  console.error({
-    message: err.message,
-    stack: err.stack,
-  });
-
-  res.status(statusCode).send({ message: err.message });
+  if (env.NODE_ENV === "development") {
+    console.error(err);
+  }
+  if (
+    err instanceof ValidationError ||
+    err instanceof AuthenticationError ||
+    err instanceof AuthorizationError ||
+    err instanceof NotFoundError ||
+    err instanceof ConflictError
+  ) {
+    return res.status(err.status).json({ message: err.message });
+  } else {
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 const asyncHandler = (

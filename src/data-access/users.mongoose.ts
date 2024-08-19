@@ -3,6 +3,7 @@ import { NotFoundError } from "../util/errors";
 import { StaffRoleModel } from "../models/schemas/staffRole.schema";
 import { UserModel } from "../models/schemas/user.schema";
 import { RoleEnum } from "../models/enums/RoleEnum";
+import { EnrollmentModel } from "../models/schemas/enrollment.schema";
 
 export async function getUsersAuthorizedToCreateEnrollment(
   courseOfferingID: string
@@ -41,4 +42,53 @@ export async function checkIfUserExists(userID: string) {
     _id: userID,
     deletedAt: null,
   });
+}
+
+export async function getActiveStudentEnrollments(studentID: string) {
+  const currentDate = new Date();
+
+  const activeEnrollments = await EnrollmentModel.aggregate([
+    {
+      $match: {
+        studentID: studentID,
+        deletedAt: null,
+      },
+    },
+    {
+      $lookup: {
+        from: "courseofferings",
+        localField: "courseOfferingID",
+        foreignField: "_id",
+        as: "courseOffering",
+      },
+    },
+    {
+      $unwind: "$courseOffering",
+    },
+    {
+      $match: {
+        "courseOffering.deletedAt": null,
+      },
+    },
+    {
+      $lookup: {
+        from: "semesters",
+        localField: "courseOffering.semesterID",
+        foreignField: "_id",
+        as: "semester",
+      },
+    },
+    {
+      $unwind: "$semester",
+    },
+    {
+      $match: {
+        "semester.startDate": { $lte: currentDate },
+        "semester.endDate": { $gte: currentDate },
+        "semester.deletedAt": null,
+      },
+    },
+  ]);
+
+  return activeEnrollments;
 }

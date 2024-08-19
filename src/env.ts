@@ -7,6 +7,7 @@ dotenv.config();
 // Define schema for environment variables
 const envSchema = z.object({
   PORT: z.string().min(1),
+  JWT_SECRET: z.string().min(1),
   NODE_ENV: z.string(),
   DEV_DATABASE_URL: z.string().min(1),
   PROD_DATABASE_URL: z.string().min(1),
