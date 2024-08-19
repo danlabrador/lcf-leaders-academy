@@ -1,11 +1,10 @@
+import { asyncHandler } from "../../middlewares/errors.middleware";
+import { getUserByID } from "../../data-access/users.mongoose";
+import { hashPassword } from "../../util/password";
 import { NotFoundError, ValidationError } from "../../util/errors";
 import { Request, Response } from "express";
-import { asyncHandler } from "../../middlewares/errors.middleware";
-import z from "zod";
-
-import { getUserByID } from "../../data-access/users.mongoose";
 import { UpdateUserBodySchema } from "../../models/validations/users.validations";
-import { hashPassword } from "../../util/password";
+import z from "zod";
 
 export const updateUserInformationController = asyncHandler(
   async (req: Request, res: Response) => {
