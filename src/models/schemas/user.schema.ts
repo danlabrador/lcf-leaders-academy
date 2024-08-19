@@ -13,6 +13,7 @@ interface User extends Document {
   password: string;
   birthDate?: Date;
   facebook?: string;
+  google?: string;
   sectionID?: string;
   isPrimary: boolean;
   isLeader: boolean;
@@ -49,6 +50,7 @@ const userSchema = new Schema<User>(
 
     // Social Media
     facebook: { type: String },
+    google: { type: String },
 
     // Section
     sectionID: { type: String, ref: "Section" },

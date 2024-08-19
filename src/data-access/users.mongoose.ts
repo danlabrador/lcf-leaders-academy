@@ -92,3 +92,10 @@ export async function getActiveStudentEnrollments(studentID: string) {
 
   return activeEnrollments;
 }
+
+export async function getUserByID(userID: string) {
+  return await UserModel.findOne({
+    _id: userID,
+    deletedAt: null,
+  });
+}
