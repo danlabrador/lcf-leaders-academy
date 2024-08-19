@@ -1,5 +1,5 @@
 import { CourseOfferingModel } from "../models/schemas/courseOffering.schema";
-import { NotFoundError } from "./utils.mongoose";
+import { NotFoundError } from "../util/errors";
 import { StaffRoleModel } from "../models/schemas/staffRole.schema";
 import { UserModel } from "../models/schemas/user.schema";
 import { RoleEnum } from "../models/enums/RoleEnum";
