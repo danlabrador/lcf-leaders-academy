@@ -1,8 +1,7 @@
-import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 import { AuthenticationError } from "../util/errors";
-import { env } from "../env";
+import { verifyAccessToken } from "../util/jwt";
 
 const UserSessionSchema = z.object({
   id: z.string(),
@@ -20,7 +19,7 @@ export function authenticateUserMiddleware(
       throw new AuthenticationError();
     }
     const token = req.headers.authorization.split(" ")[1];
-    const authenticatedUser = jwt.verify(token, env.JWT_SECRET) as UserSession;
+    const authenticatedUser = verifyAccessToken(token) as UserSession;
     UserSessionSchema.parse(authenticatedUser);
     req.body.authenticatedUser = authenticatedUser;
     next();

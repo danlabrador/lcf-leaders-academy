@@ -99,3 +99,10 @@ export async function getUserByID(userID: string) {
     deletedAt: null,
   });
 }
+
+export async function getUserByEmail(email: string) {
+  return await UserModel.findOne({
+    email: email,
+    deletedAt: null,
+  });
+}

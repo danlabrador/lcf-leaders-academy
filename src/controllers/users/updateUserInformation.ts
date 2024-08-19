@@ -39,7 +39,6 @@ export const updateUserInformationController = asyncHandler(
       res.status(200).json(user);
     } catch (error: unknown) {
       if (error instanceof z.ZodError) {
-        console.log(error.errors);
         throw new ValidationError("Invalid user body.");
       }
 
