@@ -1,10 +1,10 @@
-import { createULID } from "@/util/ulid";
+import { createULID } from "../../util/ulid";
 import { Document, Schema, model } from "mongoose";
 
 interface Enrollment extends Document {
   _id: string;
   studentID: string;
-  courseID: string;
+  courseOfferingID: string;
   creditTo?: string;
   enrollmentDate?: Date;
   isPaid: boolean;
@@ -19,7 +19,7 @@ const enrollmentSchema = new Schema<Enrollment>(
 
     // Enrollment information
     studentID: { type: String, ref: "User", required: true },
-    courseID: { type: String, ref: "Course", required: true },
+    courseOfferingID: { type: String, ref: "CourseOffering", required: true },
     creditTo: { type: String },
     enrollmentDate: { type: Date },
     isPaid: { type: Boolean, default: false, required: true },

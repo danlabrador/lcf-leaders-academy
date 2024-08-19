@@ -1,4 +1,4 @@
-import { createULID } from "@/util/ulid";
+import { createULID } from "../../util/ulid";
 import { Document, Schema, model } from "mongoose";
 
 interface CourseOffering extends Document {

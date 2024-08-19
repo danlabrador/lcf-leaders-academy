@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import { env } from "../env";
 import mongoose from "mongoose";
 
 let database: mongoose.Connection;
@@ -14,10 +14,8 @@ const connectToDatabase = async () => {
     }
     database = (global as any).database;
   }
+  console.log("Connected to database.");
+  return database;
 };
 
-connectToDatabase().catch((err) =>
-  console.error("Database connection error:", err)
-);
-
-export { database };
+export { connectToDatabase };

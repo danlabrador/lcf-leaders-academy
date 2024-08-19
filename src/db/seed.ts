@@ -11,8 +11,8 @@ import { SectionModel } from "../models/schemas/section.schema";
 import { SemesterModel } from "../models/schemas/semester.schema";
 import { CourseOfferingModel } from "../models/schemas/courseOffering.schema";
 import bcrypt from "bcrypt";
-import { UserStatusEnum } from "@/models/enums/UserStatusEnum";
-import { RoleEnum } from "@/models/enums/RoleEnum";
+import { UserStatusEnum } from "../models/enums/UserStatusEnum";
+import { RoleEnum } from "../models/enums/RoleEnum";
 
 // Connect to MongoDB
 mongoose.connect(env.DEV_DATABASE_URL);
@@ -70,7 +70,7 @@ const seedDatabase = async () => {
       leaderID: user1._id,
       status: UserStatusEnum.ACTIVE,
       isEarlyAdopter: true,
-      role: RoleEnum.ADMIN,
+      role: RoleEnum.SUPER_ADMIN,
       createdBy: user1._id,
     });
     await user2.save();
